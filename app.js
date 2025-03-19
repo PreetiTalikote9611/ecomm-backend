@@ -4,7 +4,7 @@ const {User} = require('./model/User');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {Product} = require('./model/Product');
 const {Cart} = require('./model/Cart');
@@ -15,8 +15,12 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'))
 
+// oH8GmuCJHxmWD1nL
 
-mongoose.connect('mongodb://127.0.0.1:27017/kleProject')
+let MONGODB_URL = "mongodb+srv://preetitalikote56:oH8GmuCJHxmWD1nL@cluster0.c88wi.mongodb.net/?retryWrites=true&w=majority"
+
+
+mongoose.connect(MONGODB_URL)
 .then(()=>{
     console.log("DB is connected")
 }).catch((err)=>{
@@ -27,7 +31,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/kleProject')
 app.post('/register',async(req,res)=>{
     try{
         let {email,name,password} = req.body;
-        if(!email || !name ||!password){
+        if(!email || !name || !password){
             return res.status(400).json({message:"Some fields are Missing"})
         }
         let isUserAlreadyExist = await User.findOne({email});
